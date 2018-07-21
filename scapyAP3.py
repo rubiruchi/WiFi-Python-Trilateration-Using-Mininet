@@ -13,13 +13,16 @@ def setParams():
     global timestamp
     global SSID
     global datetime
+    global iterator3
     window = 1
     timestamp = datetime.now()
     SSID='DefaultName'
+    iterator3 = 0
 
 def myPacketHandler(pkt) :
     global SSID
     global timestamp
+    global iterator3
 
     if pkt.haslayer(Dot11) :
 
@@ -40,12 +43,16 @@ def myPacketHandler(pkt) :
                     query = "START TRANSACTION;"
                     queryBack=cur.execute(query)
 
-                    query = "INSERT INTO RSSI VALUES(\"AP3\",%d);"%(ssiNew)
+                    iterator3+=1
+
+                    query = "INSERT INTO RSSI VALUES(%d,\"AP3\",%d);"%(iterator3, ssiNew)
                     queryBack = cur.execute(query)
 
                     Conexion.commit()
 
                     timestamp=datetime.now()
+
+iterator3 = 0            
 
 try:
     sniff(iface="ap3-wlan1", prn = myPacketHandler, store=0)

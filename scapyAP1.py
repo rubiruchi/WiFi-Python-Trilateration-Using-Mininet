@@ -13,13 +13,16 @@ def setParams():
     global timestamp
     global SSID
     global datetime
+    global iterator1
     window = 1
     timestamp = datetime.now()
     SSID='DefaultName'
+    iterator1 = 0
 
 def myPacketHandler(pkt) :
     global SSID
     global timestamp
+    global iterator1
 
     if pkt.haslayer(Dot11) :
 
@@ -40,10 +43,12 @@ def myPacketHandler(pkt) :
                     query = "START TRANSACTION;"
                     queryBack=cur.execute(query)
 
-                    query = "INSERT INTO RSSI VALUES(\"AP1\",%d);"%(ssiNew)
+                    query = "INSERT INTO RSSI VALUES(%d,\"AP1\",%d);"%(iterator1,ssiNew)
                     queryBack = cur.execute(query)
 
                     Conexion.commit()
+
+                    iterator1+=1
 
                     timestamp=datetime.now()
 

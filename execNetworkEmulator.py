@@ -20,6 +20,9 @@ def execScapy2():
 def execScapy3():
     execfile("scapyAP3.py")	
 
+def execNetworkServer():
+    execfile("networkServer.py") 
+
 Conexion = MySQLdb.connect(host='localhost', user='testuser',passwd='test123', db='testMeasures')
 cur = Conexion.cursor(MySQLdb.cursors.DictCursor)
 
@@ -32,7 +35,7 @@ except MySQLdb.Warning:
     print "La tabla no esta creada"
 
 cur.execute("START TRANSACTION;")
-cur.execute("CREATE TABLE IF NOT EXISTS RSSI(AP VARCHAR(25), SSI INT);")
+cur.execute("CREATE TABLE IF NOT EXISTS RSSI(id INT, AP VARCHAR(25), SSI INT);")
 Conexion.commit()
 
 subprocess1 = Thread(target=execMininet)
@@ -41,12 +44,16 @@ subprocess1.start()
 subproc2 = Thread(target=execScapy1)
 subproc3 = Thread(target=execScapy2)
 subproc4 = Thread(target=execScapy3)
+subproc5 = Thread(target=execNetworkServer)
 
 
 time.sleep(10)
 subproc2.start()
 subproc3.start()
 subproc4.start()
+time.sleep(60)
+subproc5.start()
+
 
 while subprocess1.isAlive():
     pass

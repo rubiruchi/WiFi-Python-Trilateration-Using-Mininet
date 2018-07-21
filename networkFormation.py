@@ -10,10 +10,10 @@ from mininet.wifi.cli import CLI_wifi
 from mininet.wifi.net import Mininet_wifi
 from mininet.wifi.wmediumdConnector import interference
 
-positionMobile1='00,00,00'
-positionAP1='00,05,00'
-positionAP2='20,00,00'
-positionAP3='20,20,00'
+positionMobile1='20,20,00'
+positionAP1='00,00,00'
+positionAP2='50,00,00'
+positionAP3='00,50,00'
 
 antennaGainMobile1='0'
 txpowerMobile1='0'
@@ -61,9 +61,7 @@ def topology():
     info("*** Configuring wifi nodes\n")
     net.configureWifiNodes()
 
-    #net.plotGraph(max_x=100, max_y=100)
-
-    
+    net.plotGraph(max_x=100, max_y=100)
 
     info("*** Starting network\n")
     net.build()
