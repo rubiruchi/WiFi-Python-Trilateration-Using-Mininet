@@ -20,10 +20,7 @@ def execScapy2():
 def execScapy3():
     execfile("scapyAP3.py")	
 
-def execNetworkServer():
-    execfile("networkServer.py") 
-
-Conexion = MySQLdb.connect(host='localhost', user='testuser',passwd='test123', db='testMeasures')
+Conexion = MySQLdb.connect(host='manuelmoyatfmdb.co8n1ozzlu1i.eu-west-3.rds.amazonaws.com', port = 3306,user='manuelmoya',passwd='manuelmoya', db='ManuelMoyaTFMDB')
 cur = Conexion.cursor(MySQLdb.cursors.DictCursor)
 
 try:
@@ -44,16 +41,13 @@ subprocess1.start()
 subproc2 = Thread(target=execScapy1)
 subproc3 = Thread(target=execScapy2)
 subproc4 = Thread(target=execScapy3)
-subproc5 = Thread(target=execNetworkServer)
-
 
 time.sleep(10)
 subproc2.start()
+time.sleep(2)
 subproc3.start()
+time.sleep(2)
 subproc4.start()
-time.sleep(60)
-subproc5.start()
-
 
 while subprocess1.isAlive():
     pass

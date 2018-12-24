@@ -8,51 +8,59 @@ def getAverageSSI():
     global ssiFinal
     return ssiFinal
 
-def setParams():
+def setParamsAP3():
     global window
-    global timestamp
+    global timestampAP3
     global SSID
     global datetime
     global iterator3
+    global ssiArrayAP3
+
     window = 1
-    timestamp = datetime.now()
+    timestampAP3 = datetime.now()
     SSID='DefaultName'
     iterator3 = 0
+    ssiArrayAP3 = []
 
 def myPacketHandler(pkt) :
     global SSID
-    global timestamp
+    global timestampAP3
     global iterator3
+    global ssiArrayAP3
 
     if pkt.haslayer(Dot11) :
 
-        Conexion = MySQLdb.connect(host='localhost', user='testuser',passwd='test123', db='testMeasures')
+        Conexion = MySQLdb.connect(host='manuelmoyatfmdb.co8n1ozzlu1i.eu-west-3.rds.amazonaws.com', port = 3306,user='manuelmoya',passwd='manuelmoya', db='ManuelMoyaTFMDB')
         cur = Conexion.cursor(MySQLdb.cursors.DictCursor)
 
         #type 0 = Management subtype 4 = Beacon
         if pkt.type == 0 and pkt.subtype == 8 :
-            #if pkt.addr2 not in ap_list :
+
             ssiNew = -(256-ord(pkt.notdecoded[-4:-3]))
+            ssiArrayAP3.append(ssiNew)
+
             SSID = pkt.info;
             if SSID.startswith("Mobile") :
 
-                diffT=(datetime.now()-timestamp).seconds
+                diffT=(datetime.now()-timestampAP3).seconds
                 
-                if diffT>window:
+                if diffT > window and len(ssiArrayAP3) > 0:
 
                     query = "START TRANSACTION;"
                     queryBack=cur.execute(query)
 
                     iterator3+=1
 
-                    query = "INSERT INTO RSSI VALUES(%d,\"AP3\",%d);"%(iterator3, ssiNew)
+                    query = "INSERT INTO RSSI VALUES(%d,\"AP3\",%d);"%(iterator3, sum(ssiArrayAP3)/len(ssiArrayAP3))
                     queryBack = cur.execute(query)
+
+                    ssiArrayAP3 = []
 
                     Conexion.commit()
 
-                    timestamp=datetime.now()
+                    timestampAP3=datetime.now()
 
-iterator3 = 0            
+setParamsAP3()          
 
 try:
     sniff(iface="ap3-wlan1", prn = myPacketHandler, store=0)

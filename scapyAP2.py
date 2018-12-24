@@ -8,53 +8,61 @@ def getAverageSSI():
     global ssiFinal
     return ssiFinal
 
-def setParams():
+def setParamsAP2():
     global window
-    global timestamp
+    global timestampAP2
     global SSID
     global datetime
     global iterator2
+    global ssiArrayAP2
+
     window = 1
-    timestamp = datetime.now()
+    timestampAP2 = datetime.now()
     SSID='DefaultName'
     iterator2 = 0
+    ssiArrayAP2 = []
 
 def myPacketHandler(pkt) :
     global SSID
-    global timestamp
+    global timestampAP2
     global iterator2
+    global ssiArrayAP2
 
     if pkt.haslayer(Dot11) :
 
-        Conexion = MySQLdb.connect(host='localhost', user='testuser',passwd='test123', db='testMeasures')
+        Conexion = MySQLdb.connect(host='manuelmoyatfmdb.co8n1ozzlu1i.eu-west-3.rds.amazonaws.com', port = 3306,user='manuelmoya',passwd='manuelmoya', db='ManuelMoyaTFMDB')
         cur = Conexion.cursor(MySQLdb.cursors.DictCursor)
 
         #type 0 = Management subtype 4 = Beacon
         if pkt.type == 0 and pkt.subtype == 8 :
-            #if pkt.addr2 not in ap_list :
+
             ssiNew = -(256-ord(pkt.notdecoded[-4:-3]))
+            ssiArrayAP2.append(ssiNew)
+
             SSID = pkt.info;
+
             if SSID.startswith("Mobile") :
 
-                diffT=(datetime.now()-timestamp).seconds
+                diffT=(datetime.now()-timestampAP2).seconds
                 
-                if diffT>window:
+                if diffT > window and len(ssiArrayAP2) > 0:
 
                     query = "START TRANSACTION;"
                     queryBack=cur.execute(query)
 
                     iterator2+=1
 
-                    query = "INSERT INTO RSSI VALUES(%d,\"AP2\",%d);"%(iterator2,ssiNew)
+                    query = "INSERT INTO RSSI VALUES(%d,\"AP2\",%d);"%(iterator2, sum(ssiArrayAP2)/len(ssiArrayAP2))
                     queryBack = cur.execute(query)
+
+                    ssiArrayAP2 = []
 
                     Conexion.commit()
 
-                    timestamp=datetime.now()
+                    timestampAP2=datetime.now()
 
                     
-
-iterator2 = 0
+setParamsAP2()
 
 try:
     sniff(iface="ap2-wlan1", prn = myPacketHandler, store=0)

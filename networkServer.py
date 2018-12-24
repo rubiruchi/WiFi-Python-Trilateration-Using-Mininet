@@ -1,6 +1,7 @@
 import MySQLdb
 import math
 from networkFormation import positionAP1, positionAP2, positionAP3
+import time
 
 def getOptimalPosition(distanceToSensor, positionAntennaX, positionAntennaY):
 
@@ -73,24 +74,20 @@ def getAntenna3RX(conexionCursor):
 
 if __name__ == '__main__':
 
-	Conexion = MySQLdb.connect(host='localhost', user='testuser',passwd='test123', db='testMeasures')
+	Conexion = MySQLdb.connect(host='manuelmoyatfmdb.co8n1ozzlu1i.eu-west-3.rds.amazonaws.com', port = 3306, user='manuelmoya',passwd='manuelmoya', db='ManuelMoyaTFMDB')
 	cur = Conexion.cursor(MySQLdb.cursors.DictCursor)
 
 	while True:
 		
 		antenna1RX = getAntenna1RX(cur)
-		time.sleep(0.2)
 		antenna2RX = getAntenna2RX(cur)
-		time.sleep(0.2)
 		antenna3RX = getAntenna3RX(cur)
 
 		antennaRX = [antenna1RX, antenna2RX, antenna3RX]
 		positionAntennaX = [int(positionAP1[0:2]),int(positionAP2[0:2]),int(positionAP3[0:2])]
 		positionAntennaY = [int(positionAP1[3:5]),int(positionAP2[3:5]),int(positionAP3[3:5])]
 
-		
 		distanceToSensor=[0.0138*math.exp(-0.081*antennaRX[0]), 0.0138*math.exp(-0.081*antennaRX[1]) ,0.0138*math.exp(-0.081*antennaRX[2])]
-
 
 		getOptimalPosition(distanceToSensor, positionAntennaX, positionAntennaY)
 
