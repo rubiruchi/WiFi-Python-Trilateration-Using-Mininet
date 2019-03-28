@@ -1,3 +1,13 @@
+################################################
+################################################
+################################################
+###        TFM Manuel Moya Ferrer            ###
+###      -    Mininet Simulation     -       ###
+#        Mininet Calculator of position        #
+################################################
+################################################
+################################################
+
 import MySQLdb
 import math
 from networkFormation import positionAP1, positionAP2, positionAP3
@@ -8,8 +18,8 @@ def getOptimalPosition(distanceToSensor, positionAntennaX, positionAntennaY):
 	gradient_x = 0.0
 	gradient_y = 0.0
 
-	positionMobileX = 10.0
-	positionMobileY = 10.0
+	positionMobileX = 0
+	positionMobileY = 0
 
 	nAntennas = 3
 

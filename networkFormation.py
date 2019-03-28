@@ -1,6 +1,50 @@
 #!/usr/bin/python
 
-"Setting the position of Nodes with wmediumd to calculate the interference"
+################################################
+################################################
+################################################
+###        TFM Manuel Moya Ferrer            ###
+###      -    Mininet Simulation     -       ###
+#         Parameters of Simulation             #
+################################################
+################################################
+################################################
+
+positionMobile1='20,20,00'  # x, y, z from 0 to 99 m
+positionAP1='00,00,00'
+positionAP2='50,00,00'
+positionAP3='00,50,00'
+
+antennaGainMobile1='0'
+txpowerMobile1='0'
+antennaHeightMobile1='2'
+channelMobile1='36'
+rangeMobile1=100
+
+antennaGainAP1='3'
+txpowerAP1='0'
+antennaHeightAP1='20'
+channelAP1='36'
+rangeAP1=100
+
+antennaGainAP2='3'
+txpowerAP2='0'
+antennaHeightAP2='20'
+channelAP2='36'
+rangeAP2=100
+
+antennaGainAP3='3'
+txpowerAP3='0'
+antennaHeightAP3='20'
+channelAP3='36'
+rangeAP3=100
+
+################################################
+################################################
+################################################
+################################################
+################################################
+
 
 from mininet.node import Controller
 from mininet.log import setLogLevel, info
@@ -9,27 +53,6 @@ from mininet.wifi.link import wmediumd
 from mininet.wifi.cli import CLI_wifi
 from mininet.wifi.net import Mininet_wifi
 from mininet.wifi.wmediumdConnector import interference
-
-positionMobile1='20,20,00'
-positionAP1='00,00,00'
-positionAP2='50,00,00'
-positionAP3='00,50,00'
-
-antennaGainMobile1='0'
-txpowerMobile1='0'
-antennaHeightMobile1='2'
-
-antennaGainAP1='3'
-txpowerAP1='0'
-antennaHeightAP1='20'
-
-antennaGainAP2='3'
-txpowerAP2='0'
-antennaHeightAP2='20'
-
-antennaGainAP3='3'
-txpowerAP3='0'
-antennaHeightAP3='20'
 
 
 def topology():
@@ -41,19 +64,19 @@ def topology():
     info("*** Creating nodes\n")
 
     ap10 = net.addAccessPoint('Mobile1', ssid='Mobile1',
-        mode='a', channel='36', position=positionMobile1,range=100,antennaGain=antennaGainMobile1,
+        mode='a', channel=channelMobile1, position=positionMobile1,range=rangeMobile1,antennaGain=antennaGainMobile1,
         txpower=txpowerMobile1, antennaHeight=antennaHeightMobile1)
 
     ap1 = net.addAccessPoint('ap1', ssid='Antenna1', 
-        mode='a', channel='36', position=positionAP1,range=100,antennaGain=antennaGainAP1,
+        mode='a', channel=channelAP1, position=positionAP1,range=rangeAP1,antennaGain=antennaGainAP1,
         txpower=txpowerAP1, antennaHeight=antennaHeightAP1)
 
     ap2 = net.addAccessPoint('ap2', ssid='Antenna2',
-        mode='a', channel='36', position=positionAP2,range=100,antennaGain=antennaGainAP2,
+        mode='a', channel=channelAP2, position=positionAP2,range=rangeAP2,antennaGain=antennaGainAP2,
         txpower=txpowerAP2, antennaHeight=antennaHeightAP2)
 
     ap3 = net.addAccessPoint('ap3', ssid='Antenna3',
-        mode='a', channel='36', position=positionAP3,range=100,antennaGain=antennaGainAP3,
+        mode='a', channel=channelAP3, position=positionAP3,range=rangeAP3,antennaGain=antennaGainAP3,
         txpower=txpowerAP3, antennaHeight=antennaHeightAP3)
 
     c1 = net.addController('c1', controller=Controller)

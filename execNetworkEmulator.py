@@ -1,6 +1,16 @@
 #!/usr/bin/env python
-from scapy.all import *
 
+################################################
+################################################
+################################################
+###        TFM Manuel Moya Ferrer            ###
+###      -    Mininet Simulation     -       ###
+#         Orchestrator of emulation            #
+################################################
+################################################
+################################################
+
+from scapy.all import *
 import networkFormation
 import time
 import datetime
@@ -19,6 +29,8 @@ def execScapy2():
 
 def execScapy3():
     execfile("scapyAP3.py")	
+
+
 
 Conexion = MySQLdb.connect(host='manuelmoyatfmdb.co8n1ozzlu1i.eu-west-3.rds.amazonaws.com', port = 3306,user='manuelmoya',passwd='manuelmoya', db='ManuelMoyaTFMDB')
 cur = Conexion.cursor(MySQLdb.cursors.DictCursor)

@@ -1,3 +1,13 @@
+################################################
+################################################
+################################################
+###        TFM Manuel Moya Ferrer            ###
+###      -    Mininet Simulation     -       ###
+#             Microservice AP3                 #
+################################################
+################################################
+################################################
+
 from scapy.all import *
 import threading
 import MySQLdb
@@ -11,21 +21,18 @@ def getAverageSSI():
 def setParamsAP3():
     global window
     global timestampAP3
-    global SSID
     global datetime
-    global iterator3
+    global iterator
     global ssiArrayAP3
 
     window = 1
     timestampAP3 = datetime.now()
-    SSID='DefaultName'
-    iterator3 = 0
+    iterator = 0
     ssiArrayAP3 = []
 
 def myPacketHandler(pkt) :
-    global SSID
     global timestampAP3
-    global iterator3
+    global iterator
     global ssiArrayAP3
 
     if pkt.haslayer(Dot11) :
@@ -33,7 +40,6 @@ def myPacketHandler(pkt) :
         Conexion = MySQLdb.connect(host='manuelmoyatfmdb.co8n1ozzlu1i.eu-west-3.rds.amazonaws.com', port = 3306,user='manuelmoya',passwd='manuelmoya', db='ManuelMoyaTFMDB')
         cur = Conexion.cursor(MySQLdb.cursors.DictCursor)
 
-        #type 0 = Management subtype 4 = Beacon
         if pkt.type == 0 and pkt.subtype == 8 :
 
             ssiNew = -(256-ord(pkt.notdecoded[-4:-3]))
@@ -49,9 +55,9 @@ def myPacketHandler(pkt) :
                     query = "START TRANSACTION;"
                     queryBack=cur.execute(query)
 
-                    iterator3+=1
+                    iterator+=1
 
-                    query = "INSERT INTO RSSI VALUES(%d,\"AP3\",%d);"%(iterator3, sum(ssiArrayAP3)/len(ssiArrayAP3))
+                    query = "INSERT INTO RSSI VALUES(%d,\"AP3\",%d);"%(iterator, sum(ssiArrayAP3)/len(ssiArrayAP3))
                     queryBack = cur.execute(query)
 
                     ssiArrayAP3 = []
